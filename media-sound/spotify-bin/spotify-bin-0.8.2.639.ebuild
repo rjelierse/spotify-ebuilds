@@ -32,9 +32,12 @@ RDEPEND="${DEPEND}
 	>=x11-libs/qt-webkit-4.5.0i[dbus]
 	>=sys-devel/gcc-4.0.0[cxx]
 	dev-libs/openssl
+	dev-libs/nss
+	dev-libs/nspr
 	>=x11-libs/libXScrnSaver-1.2.0
 	sys-apps/usbutils
-	ffmpeg? ( <media-video/ffmpeg-0.8.0 )
+	media-libs/libpng:1.2
+	ffmpeg? ( media-video/ffmpeg )
 "
 
 OPENSSL_VERSION_CONFLICT=1
@@ -48,6 +51,15 @@ src_unpack() {
 
 src_install() {
 	cp -pPR * "${D}"/ || die
+
+	# Create symbolic links for dev-libs/nss libraries
+	dosym libnss3.so /usr/lib/libnss3.so.1d
+	dosym libnssutil3.so /usr/lib/libnssutil3.so.1d
+	dosym libsmime3.so /usr/lib/libsmime3.so.1d
+
+	# Create symbolic links for dev-libs/nspr libraries
+	dosym libplc4.so /usr/lib/libplc4.so.0d
+	dosym libnspr4.so /usr/lib/libnspr4.so.0d
 
 	# If we have a slotted install of dev-libs/openssl:0.9.8 and
 	# an install of >=dev-libs/openssl-1, conflicts will arise.
